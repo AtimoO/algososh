@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ElementStates } from "../../types/element-states";
-import { TCharsArray } from "../../types/string";
+import { TItemArray } from "../../types/utils";
 import { reverseCharsArray } from "../../utils/string";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -12,14 +12,14 @@ import style from "./string.module.css";
 export const StringComponent: React.FC = () => {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [loaderBtn, setLoaderBtn] = useState<boolean>(false);
-  const [charsArray, setCharsArray] = useState<Array<TCharsArray>>([]);
+  const [charsArray, setCharsArray] = useState<Array<TItemArray>>([]);
 
   const handlerChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.currentTarget.value.length > 0 ? setDisabled(false) : setDisabled(true);
     setCharsArray(
-      e.currentTarget.value.split("").map((char: string) => {
+      e.currentTarget.value.split("").map((item: string) => {
         return {
-          char,
+          item,
           state: ElementStates.Default,
         };
       })
@@ -51,7 +51,7 @@ export const StringComponent: React.FC = () => {
       </div>
       <div className={style.container__circle}>
         {charsArray?.map((char, index) => (
-          <Circle state={char.state} letter={char.char} key={index} />
+          <Circle state={char.state} letter={`${char.item}`} key={index} />
         ))}
       </div>
     </SolutionLayout>
