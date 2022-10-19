@@ -25,7 +25,7 @@ export const getRandomArr = (
   sizeArray: number = getRandomNumber(3, 17)
 ): Array<number> => {
   const array: Array<number> = [];
-  console.log(sizeArray);
+
   for (let i = 0; i < sizeArray; i++) {
     array.push(getRandomNumber(min, max));
   }

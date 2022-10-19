@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
 import { SortMethod, SortType, TItemArray } from "../../types/utils";
-import { selectionSort } from "../../utils/sotring";
+import { bubbleSort, selectionSort } from "../../utils/sotring";
 import { getRandomArr } from "../../utils/utils";
 import { Button } from "../ui/button/button";
 import { Column } from "../ui/column/column";
@@ -13,7 +13,11 @@ import style from "./sorting-page.module.css";
 
 export const SortingPage: React.FC = () => {
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [methodSort, setMethodSort] = useState<SortMethod>(SortMethod.Choise);
   const [array, setArray] = useState<Array<TItemArray>>([]);
+
+  const [loaderAsc, setLoaderAsc] = useState<boolean>(false);
+  const [loaderDesc, setLoaderDesc] = useState<boolean>(false);
 
   const generateArray = () => {
     setArray(
@@ -26,15 +30,31 @@ export const SortingPage: React.FC = () => {
     );
   };
 
-  const handlerSort = (
+  const handlerSort = async (
     array: Array<TItemArray>,
-    sort: SortType = SortType.Asc,
-    method: SortMethod = SortMethod.Bubble
+    sortType: SortType,
+    sortMethod: SortMethod
   ) => {
-    if (method === SortMethod.Choise) {
-      setArray(selectionSort(array, sort));
+    setDisabled(true);
+    sortType === SortType.Asc ? setLoaderAsc(true) : setLoaderDesc(true);
+    if (sortMethod === SortMethod.Choise) {
+      await selectionSort(array, sortType, setArray);
     } else {
-      // other method sort
+      await bubbleSort(array, sortType, setArray);
+    }
+    setDisabled(false);
+    setLoaderAsc(false);
+    setLoaderDesc(false);
+  };
+
+  const handlerChoiseMethodSort = (
+    e: React.SyntheticEvent<HTMLInputElement>
+  ) => {
+    const method = e.currentTarget.value;
+    if (method === SortMethod.Choise) {
+      setMethodSort(method);
+    } else if (method === SortMethod.Bubble) {
+      setMethodSort(method);
     }
   };
 
@@ -45,28 +65,43 @@ export const SortingPage: React.FC = () => {
           <RadioInput
             label="Выбор"
             defaultChecked
+            defaultValue={SortMethod.Choise}
             name="radio"
             disabled={disabled}
+            onClick={handlerChoiseMethodSort}
           />
-          <RadioInput label="Пузырёк" name="radio" disabled={disabled} />
+          <RadioInput
+            label="Пузырёк"
+            defaultValue={SortMethod.Bubble}
+            name="radio"
+            disabled={disabled}
+            onClick={handlerChoiseMethodSort}
+          />
         </div>
         <div className={style.btn__group}>
           <Button
             text="По возрастанию"
             sorting={Direction.Ascending}
             disabled={disabled}
-            onClick={() => handlerSort(array)}
+            isLoader={loaderAsc}
+            onClick={() => handlerSort(array, SortType.Asc, methodSort)}
           />
           <Button
             text="По убыванию"
             sorting={Direction.Descending}
             disabled={disabled}
+            isLoader={loaderDesc}
+            onClick={() => handlerSort(array, SortType.Desc, methodSort)}
           />
         </div>
-        <Button text="Новый массив" onClick={generateArray} />
+        <Button
+          text="Новый массив"
+          onClick={generateArray}
+          disabled={disabled}
+        />
       </div>
       <div className={style.container__array}>
-        {array.map((item, index) => (
+        {array?.map((item, index) => (
           <Column index={+item.item} state={item.state} key={index} />
         ))}
       </div>
