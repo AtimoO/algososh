@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { Stack } from "../../utils/stack";
+import React, { useEffect, useState } from "react";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { ElementStates } from "../../types/element-states";
+import { Stack, TStackElement } from "../../utils/stack";
+import { delay } from "../../utils/utils";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
@@ -8,19 +11,53 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import style from "./stack-page.module.css";
 
 export const StackPage: React.FC = () => {
-  const array = new Stack<string>();
+  const stack = new Stack<string>();
 
   const [input, setInput] = useState<string>("");
+  const [stackArray, setStackArray] = useState<Array<TStackElement>>([]);
   const [addBtn, setAddBtn] = useState<boolean>(true);
-  const [removeBtn, setRemoveBtn] = useState<boolean>(true);
+  // const [removeBtn, setRemoveBtn] = useState<boolean>(true);
   const [clearBtn, setClearBtn] = useState<boolean>(true);
 
-  array.push("прив");
-  array.push("как");
-  array.pop();
-  console.log(array.peak()); // как
-  array.push("дела?");
-  console.log(array.peak()); // дела?
+  useEffect(() => {
+    !input ? setAddBtn(true) : setAddBtn(false);
+  }, [input]);
+
+  useEffect(() => {
+    stackArray.length > 0 ? setClearBtn(false) : setClearBtn(true);
+  }, [stackArray]);
+
+  const handlerChangeInput = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    setInput(e.currentTarget.value);
+  };
+
+  const handlerAddItem = async () => {
+    stack.push(input);
+    stackArray.push({ item: stack.peak(), state: ElementStates.Changing });
+    setStackArray([...stackArray]);
+    setInput("");
+
+    await delay(SHORT_DELAY_IN_MS);
+
+    stackArray[stackArray.length - 1].state = ElementStates.Default;
+    setStackArray([...stackArray]);
+  };
+
+  const handlerRemoveItem = async () => {
+    stack.pop();
+    stackArray[stackArray.length - 1].state = ElementStates.Changing;
+    setStackArray([...stackArray]);
+
+    await delay(SHORT_DELAY_IN_MS);
+
+    stackArray.pop();
+    setStackArray([...stackArray]);
+  };
+
+  const handlerClearStack = () => {
+    stack.clearStack();
+    setStackArray([]);
+  };
 
   return (
     <SolutionLayout title="Стек">
@@ -28,35 +65,37 @@ export const StackPage: React.FC = () => {
         <div className={style.container_buttons}>
           <Input
             extraClass={style.input}
-            onChange={() => console.log("input change")}
+            onChange={handlerChangeInput}
             placeholder="Введите текст"
             maxLength={4}
             isLimitText
+            value={input}
           />
           <Button
-            onClick={() => console.log("click add")}
+            onClick={handlerAddItem}
             text={"Добавить"}
             disabled={addBtn}
           />
           <Button
-            onClick={() => console.log("click delete")}
+            onClick={handlerRemoveItem}
             text={"Удалить"}
-            disabled={removeBtn}
+            disabled={clearBtn}
           />
         </div>
         <Button
-          onClick={() => console.log("click clear list")}
+          onClick={handlerClearStack}
           text={"Очистить"}
           disabled={clearBtn}
         />
       </div>
       <div className={style.container__circle}>
-        {array.getContainer()?.map((item, index) => (
+        {stackArray?.map((item, index) => (
           <Circle
             key={index}
-            letter={`${item}`}
+            state={item.state}
+            letter={`${item.item}`}
             index={index}
-            head={index === array.getSize() - 1 ? "top" : ""}
+            head={index === stackArray.length - 1 ? "top" : ""}
           />
         ))}
       </div>

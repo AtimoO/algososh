@@ -8,7 +8,6 @@ interface IStack<T> {
   peak: () => T | null;
   getSize: () => number;
   clearStack: () => Array<T>;
-  getContainer: () => Array<T>;
 }
 
 export class Stack<T> implements IStack<T> {
@@ -29,6 +28,4 @@ export class Stack<T> implements IStack<T> {
   getSize = () => this.container.length;
 
   clearStack = () => (this.container = []);
-
-  getContainer = () => this.container;
 }
