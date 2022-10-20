@@ -1,10 +1,10 @@
-import { TItemArray } from "../types/utils";
+import { TItem, TItemArray } from "../types/utils";
 
 export const delay = (milliseconds: number) =>
   new Promise((res) => setTimeout(res, milliseconds));
 
 export const swap = (
-  array: Array<TItemArray>,
+  array: Array<TItemArray<TItem>>,
   firstIndex: number,
   secondIndex: number
 ): void => {

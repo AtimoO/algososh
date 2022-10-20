@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
-import { SortMethod, SortType, TItemArray } from "../../types/utils";
+import { SortMethod, SortType, TItem, TItemArray } from "../../types/utils";
 import { bubbleSort, selectionSort } from "../../utils/sotring";
 import { getRandomArr } from "../../utils/utils";
 import { Button } from "../ui/button/button";
@@ -14,7 +14,7 @@ import style from "./sorting-page.module.css";
 export const SortingPage: React.FC = () => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [methodSort, setMethodSort] = useState<SortMethod>(SortMethod.Choise);
-  const [array, setArray] = useState<Array<TItemArray>>([]);
+  const [array, setArray] = useState<Array<TItemArray<TItem>>>([]);
 
   const [loaderAsc, setLoaderAsc] = useState<boolean>(false);
   const [loaderDesc, setLoaderDesc] = useState<boolean>(false);
@@ -31,7 +31,7 @@ export const SortingPage: React.FC = () => {
   };
 
   const handlerSort = async (
-    array: Array<TItemArray>,
+    array: Array<TItemArray<TItem>>,
     sortType: SortType,
     sortMethod: SortMethod
   ) => {

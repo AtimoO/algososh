@@ -1,7 +1,9 @@
 import { ElementStates } from "./element-states";
 
-export type TItemArray = {
-  item: string | number;
+export type TItem = string | number;
+
+export type TItemArray<T> = {
+  item: T;
   state: ElementStates;
 };
 

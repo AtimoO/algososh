@@ -1,10 +1,10 @@
 import { SHORT_DELAY_IN_MS } from "../constants/delays";
 import { ElementStates } from "../types/element-states";
-import { SortType, TItemArray } from "../types/utils";
+import { SortType, TItem, TItemArray } from "../types/utils";
 import { delay, swap } from "./utils";
 
 export const selectionSort = async (
-  arr: Array<TItemArray>,
+  arr: Array<TItemArray<TItem>>,
   sortType: SortType,
   func: Function
 ) => {
@@ -40,7 +40,7 @@ export const selectionSort = async (
 };
 
 export const bubbleSort = async (
-  arr: Array<TItemArray>,
+  arr: Array<TItemArray<TItem>>,
   sortType: SortType,
   func: Function
 ) => {
@@ -51,7 +51,7 @@ export const bubbleSort = async (
       func([...arr]);
 
       await delay(SHORT_DELAY_IN_MS);
-      
+
       if (
         (sortType === SortType.Asc ? arr[j].item : arr[j + 1].item) >
         (sortType === SortType.Asc ? arr[j + 1].item : arr[j].item)

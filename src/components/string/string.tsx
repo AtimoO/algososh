@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ElementStates } from "../../types/element-states";
-import { TItemArray } from "../../types/utils";
+import { TItem, TItemArray } from "../../types/utils";
 import { reverseCharsArray } from "../../utils/string";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -12,7 +12,7 @@ import style from "./string.module.css";
 export const StringComponent: React.FC = () => {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [loaderBtn, setLoaderBtn] = useState<boolean>(false);
-  const [charsArray, setCharsArray] = useState<Array<TItemArray>>([]);
+  const [charsArray, setCharsArray] = useState<Array<TItemArray<TItem>>>([]);
 
   const handlerChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.currentTarget.value.length > 0 ? setDisabled(false) : setDisabled(true);

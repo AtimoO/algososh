@@ -1,10 +1,10 @@
 import { DELAY_IN_MS } from "../constants/delays";
 import { ElementStates } from "../types/element-states";
-import { TItemArray } from "../types/utils";
+import { TItem, TItemArray } from "../types/utils";
 import { delay, swap } from "./utils";
 
 export const reverseCharsArray = async (
-  chars: Array<TItemArray>,
+  chars: Array<TItemArray<TItem>>,
   setCharsArray: Function,
   start: number = 0,
   end: number = chars.length - 1
