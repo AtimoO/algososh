@@ -16,7 +16,6 @@ export const StackPage: React.FC = () => {
   const [input, setInput] = useState<string>("");
   const [stackArray, setStackArray] = useState<Array<TStackElement>>([]);
   const [addBtn, setAddBtn] = useState<boolean>(true);
-  // const [removeBtn, setRemoveBtn] = useState<boolean>(true);
   const [clearBtn, setClearBtn] = useState<boolean>(true);
 
   useEffect(() => {
