@@ -1,8 +1,8 @@
 import { TItemArray } from "../types/utils";
 
 export type TQueueElement = TItemArray<string | null> & {
-  head: any;
-  tail: any;
+  head: boolean;
+  tail: boolean;
 };
 
 interface IQueue<T> {
@@ -12,6 +12,9 @@ interface IQueue<T> {
   isEmpty: () => boolean;
   getHead: () => number;
   getTail: () => number;
+  getLength: () => number;
+  clear: () => void;
+  isFull: () => boolean;
 }
 
 export class Queue<T> implements IQueue<T> {
@@ -30,7 +33,7 @@ export class Queue<T> implements IQueue<T> {
     if (this.length >= this.size) {
       throw new Error("Превышена максимальная длина");
     }
-    this.container[this.tail % this.size] = item;
+    this.container[this.tail] = item;
     this.tail++;
     this.length++;
   };
@@ -39,7 +42,12 @@ export class Queue<T> implements IQueue<T> {
     if (this.isEmpty()) {
       throw new Error("Нет элементов в очереди");
     }
-    this.container[this.head % this.size] = null;
+
+    if (this.head === this.size) {
+      this.head = 0;
+    }
+
+    this.container[this.head] = null;
     this.head++;
     this.length--;
   };
@@ -53,7 +61,14 @@ export class Queue<T> implements IQueue<T> {
 
   isEmpty = () => this.length === 0;
   getHead = () => this.head;
-  getTail = () => this.tail;
+  getTail = () => this.tail - 1;
+  getLength = () => this.length;
+  clear = () => {
+    this.container = [];
+    this.head = 0;
+    this.tail = 0;
+    this.length = 0;
+  };
 
-  getContainer = () => this.container; // для проверки контейнера
+  isFull = () => this.tail - 1 === 6;
 }
