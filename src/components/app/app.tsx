@@ -8,11 +8,11 @@ import { StringComponent } from "../string/string";
 import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
 
-import "./app.css";
+import style from "./app.module.css";
 
 function App() {
   return (
-    <div className="app">
+    <div className={style.app}>
       <BrowserRouter>
         <Switch>
           <Route path="/" exact>
@@ -43,7 +43,3 @@ function App() {
 }
 
 export default App;
-
-/** TODO:
- * 2. Вывод кругов можно сделать отдельным элементом!?
- */

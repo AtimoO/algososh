@@ -26,6 +26,7 @@ interface ILinkedList<T> {
   getNodeByIndex: (index: number) => T | null;
   deleteByIndex: (index: number) => void;
   deleteHead: () => void;
+  deleteTail: () => void;
   getSize: () => number;
 }
 
@@ -48,6 +49,7 @@ export class LinkedList<T> implements ILinkedList<T> {
     if (!this.head || !this.tail) {
       this.head = node;
       this.tail = node;
+      this.size++;
 
       return this;
     }
@@ -149,9 +151,28 @@ export class LinkedList<T> implements ILinkedList<T> {
       this.head = deletedHead.next;
     } else {
       this.head = null;
+      this.tail = null;
     }
     this.size--;
     return deletedHead ? deletedHead.value : null;
+  };
+
+  deleteTail = () => {
+    if (this.size === 0) {
+      return null;
+    }
+
+    let currentNode = this.head;
+    let prev = null;
+    let currentIndex = 0;
+    while (currentIndex < this.size - 1 && currentNode) {
+      prev = currentNode;
+      currentNode = currentNode.next;
+      currentIndex++;
+    }
+    if (prev && currentNode) prev.next = currentNode.next;
+    this.size--;
+    return currentNode ? currentNode.value : null;
   };
 
   getSize = () => this.size;

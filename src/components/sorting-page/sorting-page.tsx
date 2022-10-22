@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
 import { SortMethod, SortType, TItem, TItemArray } from "../../types/utils";
@@ -29,6 +29,10 @@ export const SortingPage: React.FC = () => {
       })
     );
   };
+
+  useEffect(() => {
+    generateArray();
+  }, []);
 
   const handlerSort = async (
     array: Array<TItemArray<TItem>>,

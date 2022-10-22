@@ -11,7 +11,7 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
 import style from "./list-page.module.css";
 
-const startArray = [0, 34];
+const startArray = [0, 34, 8, 1];
 const linkedList = new LinkedList<string | number>(startArray);
 
 export const ListPage: React.FC = () => {
@@ -46,32 +46,55 @@ export const ListPage: React.FC = () => {
   const handlerAddHead = async () => {
     setAddHead(true);
     linkedList.prepend(inputValue);
-    listArray[0] = {
-      ...listArray[0],
-      isAdded: true,
-      head: false,
-      newCircle: { item: inputValue },
-      state: ElementStates.Changing,
-    };
+
+    if (linkedList.getSize() > 1) {
+      listArray[0] = {
+        ...listArray[0],
+        isAdded: true,
+        head: false,
+        newCircle: { item: inputValue },
+        state: ElementStates.Changing,
+      };
+    } else {
+      listArray[0] = {
+        item: inputValue,
+        isAdded: true,
+        head: true,
+        newCircle: null,
+        state: ElementStates.Changing,
+      };
+    }
     setListArray([...listArray]);
 
     await delay(DELAY_IN_MS);
 
-    listArray[0] = {
-      ...listArray[0],
-      isAdded: true,
-      head: false,
-      newCircle: null,
-      state: ElementStates.Default,
-    };
+    if (linkedList.getSize() > 1) {
+      listArray[0] = {
+        ...listArray[0],
+        isAdded: false,
+        head: false,
+        newCircle: null,
+        state: ElementStates.Default,
+      };
+    } else {
+      listArray[0] = {
+        item: inputValue,
+        isAdded: false,
+        head: true,
+        tail: true,
+        newCircle: null,
+        state: ElementStates.Default,
+      };
+    }
     setListArray([...listArray]);
 
     await delay(DELAY_IN_MS);
 
-    listArray.unshift({ item: inputValue, state: ElementStates.Modified });
-    setListArray([...listArray]);
-
-    await delay(DELAY_IN_MS);
+    if (linkedList.getSize() > 1) {
+      listArray.unshift({ item: inputValue, state: ElementStates.Modified });
+      setListArray([...listArray]);
+      await delay(DELAY_IN_MS);
+    }
 
     listArray[0] = {
       ...listArray[0],
@@ -87,32 +110,56 @@ export const ListPage: React.FC = () => {
     setAddTail(true);
     linkedList.append(inputValue);
 
-    listArray[listArray.length - 1] = {
-      ...listArray[listArray.length - 1],
-      tail: false,
-      isAdded: true,
-      newCircle: { item: inputValue },
-      state: ElementStates.Changing,
-    };
+    if (linkedList.getSize() > 0) {
+      listArray[listArray.length - 1] = {
+        ...listArray[listArray.length - 1],
+        tail: false,
+        isAdded: true,
+        newCircle: { item: inputValue },
+        state: ElementStates.Changing,
+      };
+    } else {
+      listArray[0] = {
+        item: inputValue,
+        head: true,
+        tail: true,
+        isAdded: true,
+        newCircle: null,
+        state: ElementStates.Changing,
+      };
+    }
     setListArray([...listArray]);
 
     await delay(DELAY_IN_MS);
 
-    listArray[listArray.length - 1] = {
-      ...listArray[listArray.length - 1],
-      tail: false,
-      isAdded: false,
-      newCircle: null,
-      state: ElementStates.Default,
-    };
+    if (linkedList.getSize() > 0) {
+      listArray[listArray.length - 1] = {
+        ...listArray[listArray.length - 1],
+        tail: false,
+        isAdded: false,
+        newCircle: null,
+        state: ElementStates.Default,
+      };
+    } else {
+      listArray[0] = {
+        item: inputValue,
+        head: true,
+        tail: true,
+        isAdded: false,
+        newCircle: null,
+        state: ElementStates.Default,
+      };
+    }
+
     setListArray([...listArray]);
 
     await delay(DELAY_IN_MS);
 
-    listArray.push({ item: inputValue, state: ElementStates.Modified });
-    setListArray([...listArray]);
-
-    await delay(DELAY_IN_MS);
+    if (linkedList.getSize() > 0) {
+      listArray.push({ item: inputValue, state: ElementStates.Modified });
+      setListArray([...listArray]);
+      await delay(DELAY_IN_MS);
+    }
 
     listArray[listArray.length - 1] = {
       ...listArray[listArray.length - 1],
@@ -130,36 +177,51 @@ export const ListPage: React.FC = () => {
 
   const handlerRemoveHead = async () => {
     setRemoveHead(true);
-    listArray[0] = {
-      ...listArray[0],
-      head: false,
-      state: ElementStates.Changing,
-      item: "",
-      isRemoved: true,
-      newCircle: { item: listArray[0].item },
-    };
+    linkedList.deleteHead();
+    if (linkedList.getSize() > 0) {
+      listArray[0] = {
+        ...listArray[0],
+        head: false,
+        state: ElementStates.Changing,
+        item: "",
+        isRemoved: true,
+        newCircle: { item: listArray[0].item },
+      };
+    } else {
+      listArray[0] = {
+        ...listArray[0],
+        head: false,
+        tail: false,
+        state: ElementStates.Changing,
+        item: "",
+        isRemoved: true,
+        newCircle: { item: listArray[0].item },
+      };
+    }
     setListArray([...listArray]);
 
     await delay(DELAY_IN_MS);
 
-    listArray.shift();
     listArray[0].state = ElementStates.Modified;
+    listArray.shift();
     setListArray([...listArray]);
 
     await delay(DELAY_IN_MS);
-
-    listArray[0] = {
-      ...listArray[0],
-      state: ElementStates.Default,
-      head: true,
-    };
-    setListArray([...listArray]);
+    if (linkedList.getSize() > 0) {
+      listArray[0] = {
+        ...listArray[0],
+        state: ElementStates.Default,
+        head: true,
+      };
+      setListArray([...listArray]);
+    }
     setInputValue("");
     setRemoveHead(false);
   };
 
   const handlerRemoveTail = async () => {
     setRemoveTail(true);
+    linkedList.deleteTail();
     listArray[listArray.length - 1] = {
       ...listArray[listArray.length - 1],
       tail: false,
@@ -169,17 +231,21 @@ export const ListPage: React.FC = () => {
       newCircle: { item: listArray[listArray.length - 1].item },
     };
     setListArray([...listArray]);
-
     await delay(DELAY_IN_MS);
 
-    listArray.pop();
-    listArray[listArray.length - 1].state = ElementStates.Modified;
-    setListArray([...listArray]);
+    if (linkedList.getSize() > 0) {
+      listArray.pop();
+      listArray[listArray.length - 1].state = ElementStates.Modified;
+      setListArray([...listArray]);
 
-    await delay(DELAY_IN_MS);
+      await delay(DELAY_IN_MS);
 
-    listArray[listArray.length - 1].state = ElementStates.Default;
-    listArray[listArray.length - 1].tail = true;
+      listArray[listArray.length - 1].state = ElementStates.Default;
+      listArray[listArray.length - 1].tail = true;
+    } else {
+      listArray.pop();
+    }
+
     setListArray([...listArray]);
     setInputValue("");
     setRemoveTail(false);
