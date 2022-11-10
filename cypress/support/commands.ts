@@ -1,4 +1,13 @@
 /// <reference types="cypress" />
+/// <reference path="../support/index.d.ts" />
+
+
+Cypress.Commands.add("checkStyles", (element, letter, color) => {
+  cy.wrap(element)
+    .contains(letter)
+    .parent()
+    .should("have.css", "border", `4px solid ${color}`);
+});
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
