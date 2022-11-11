@@ -33,6 +33,7 @@ export const FibonacciPage: React.FC = () => {
           placeholder="Введите число"
           max={19}
           type={"number"}
+          data-cy="input-fibo"
           isLimitText
         />
         <Button
@@ -41,6 +42,7 @@ export const FibonacciPage: React.FC = () => {
           linkedList="small"
           isLoader={loaderBtn}
           disabled={disabled}
+          data-cy="btn-fibo"
         />
       </div>
       <div className={style.container__circle}>

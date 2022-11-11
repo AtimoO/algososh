@@ -2,7 +2,7 @@
 
 import { DELAY_IN_MS } from "./../../src/constants/delays";
 
-describe("recursion page health check", function () {
+describe("Recursion page health check", function () {
   const colorDefault = "rgb(0, 50, 255)";
   const colorChanging = "rgb(210, 82, 225)";
   const colorModified = "rgb(127, 224, 81)";
