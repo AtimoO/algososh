@@ -69,22 +69,26 @@ export const StackPage: React.FC = () => {
             maxLength={4}
             isLimitText
             value={input}
+            data-cy="input-stack"
           />
           <Button
             onClick={handlerAddItem}
             text={"Добавить"}
             disabled={addBtn}
+            data-cy="btn-add-stack"
           />
           <Button
             onClick={handlerRemoveItem}
             text={"Удалить"}
             disabled={clearBtn}
+            data-cy="btn-remove-stack"
           />
         </div>
         <Button
           onClick={handlerClearStack}
           text={"Очистить"}
           disabled={clearBtn}
+          data-cy="btn-clear-stack"
         />
       </div>
       <div className={style.container__circle}>
